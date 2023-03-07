@@ -46,7 +46,8 @@ function buildTile(color) {
             revealedCount += 2;
 
             if (revealedCount === tileCount) {
-                alert("You win! Refresh To Play Again.");
+                totalWins++
+                document.querySelector("#wincount").innerHTML = totalWins
             }
 
             return;
@@ -83,14 +84,4 @@ for (let i = 0; i < tileCount; i++) {
     
 }
 
-function getResult () {
-    if (result === won) {
-        return totalWins = totalWins++;
-    } else if (result === lost) {
-            return totalLoses = totalLoses++;
-        }
-        }
-    document.getElementById("wincount").innerHTML = totalWins;
-    document.getElementById("lostcount").innerHTML = totalLoses;
-    console.log(totalWins);
-    console.log(totalLoses);
+
