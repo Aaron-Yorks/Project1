@@ -1,19 +1,26 @@
 //Define your constants
 const tilesContainer = document.querySelector(".tiles");
 const colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet", "gold"];
+// Below is a spread operator, this will cause each color to appear twice in the console
 const colorsPicklist = [...colors, ...colors];
+//reference to the amount of tiles we have
 const tileCount = colorsPicklist.length;
 
-//Game state
+//Game state variables
+// comments are meant to explain the code below them
+
+// how many tiles does the user get correct?
 let revealedCount = 0;
+// the active tile refers to the tile the user clicked on, and are now looking for the next tile to match. This refers to the div itself
 let activeTile = null;
-let awaitingEndOfMove = false; //this means that when you click on the tile again the color doesn't disappear
+//this means that when you click on the tile again the color doesn't disappear
+let awaitingEndOfMove = false; 
 let totalWins = 0;
 let totalLoses = 0;
 
+const resetButton = document.querySelector("button");
 
-
-// Makes a div class in JS instead of HTML
+// Makes a div class in JS instead of HTML, this will take in a color and return it to the loop down below
 function buildTile(color) {
     const element = document.createElement("div");
 
@@ -26,8 +33,9 @@ function buildTile(color) {
             return;
         }
 // the event listener above makes sure that even if you get a move wrong, it doesn't tell you the answer
+// below means: we are not awaiting the end of move, so lets reveal the color
         element.style.backgroundColor = color;
-
+// ! means the opposite- so there is no acrive tile
         if (!activeTile) {
             activeTile = element;
 
@@ -48,6 +56,8 @@ function buildTile(color) {
             if (revealedCount === tileCount) {
                 totalWins++
                 document.querySelector("#wincount").innerHTML = totalWins
+                deleteBoard ()
+                resetBoard ()
             }
 
             return;
@@ -71,17 +81,33 @@ function buildTile(color) {
     return element;
 }
 
-
-
-//build up tiles using a for loop
-for (let i = 0; i < tileCount; i++) {
-    const randomIndex = Math.floor(Math.random() * colorsPicklist.length);
-    const color = colorsPicklist[randomIndex];
-    const tile = buildTile(color);
    
-    colorsPicklist.splice(randomIndex, 1);
-    tilesContainer.appendChild(tile);
-    
+//build up tiles using a for loop, build up tiles
+//we need to ask the loop to get a random color using the math.random function
+
+
+function resetBoard () {
+    for (let i = 0; i < tileCount; i++) {
+        const randomIndex = Math.floor(Math.random() * colorsPicklist.length);
+        const color = colorsPicklist[randomIndex];
+        //the tiles should be in random order now because of the code above
+        const tile = buildTile(color);
+       // the splice method makes it so the console returns two colors randomly
+        colorsPicklist.splice(randomIndex, 1);
+        tilesContainer.appendChild(tile);
+        
+    }
+}
+resetBoard ()
+
+function deleteBoard () {
+    const allTiles = document.querySelectorAll(".tile")
+    for (let i = 0; i < allTiles.length; i++) {
+        allTiles[i].remove ()
+    }
 }
 
-
+resetButton.addEventListener("click",() => {
+    deleteBoard()
+    resetBoard()
+})
